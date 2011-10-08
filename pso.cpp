@@ -5,8 +5,8 @@
 #include "particle_set.h"
 #include "euclidean.h"
 
-static const unsigned NUMDIM = 2;
-static const unsigned NUMATTRACTORS = 1;
+static const unsigned NUMDIM = 3;
+static const unsigned NUMATTRACTORS = 10;
 
 typedef pso::CPoint<NUMDIM> CState;
 
@@ -19,9 +19,9 @@ struct CEval
     double lValue = 0;
     for(unsigned i=0;i<NUMATTRACTORS;++i)
       for(unsigned j=0;j<NUMDIM;++j)
-        lValue += fabs(pAttractors[i][j]-pP.mX[j]);
-        //lValue += exp(-(pAttractors[i][j]-pP.mX[j])*(pAttractors[i][j]-pP.mX[j])/(2*pVars[i]));
-    //std::cout << "(" << pAttractors[0][0] << "," << pAttractors[0][1] << "),(" << pP.mX[0] << "," << pP.mX[1] << "):" << lValue << std::endl;
+        lValue += fabs(pAttractors[i][j]-pP[j]);
+        //lValue += exp(-(pAttractors[i][j]-mX[j])*(pAttractors[i][j]-mX[j])/(2*pVars[i]));
+    //std::cout << "(" << pAttractors[0][0] << "," << pAttractors[0][1] << "),(" << pP[0] << "," << pP[1] << "):" << lValue << std::endl;
     return lValue;
   }
 };
@@ -57,6 +57,5 @@ double run()
 
 int main(int argc,char* argv[])
 {
-  gPointCount = 0;
   std::cout << run() << std::endl;
 }

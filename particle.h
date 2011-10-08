@@ -26,13 +26,9 @@ namespace pso
       void update(tState &pGlobalBestX,double pRp, double pRg)
       {
         //mV = mW*mV + mWp*pRp*(mBestX-mX) + mWg*pRg*(pGlobalBestX-mX);
-        std::cout << "st0" << std::endl;
         mV *= mW;
-        std::cout << "st1" << std::endl;
         mV += mWp*pRp*(mBestX-mX);
-        std::cout << "st2" << std::endl;
         mV += mWg*pRg*(pGlobalBestX-mX);
-        std::cout << "st3" << std::endl;
 
         mX = mX+mV;
         double lValue = mEval(mX);

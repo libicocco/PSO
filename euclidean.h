@@ -39,7 +39,7 @@ namespace pso
   }//namespace operators
 
   template <unsigned DIM>
-    struct CPoint : public operators::CDummy
+    class CPoint : public operators::CDummy
   {
     public:
       CPoint()
@@ -52,14 +52,18 @@ namespace pso
 
       CPoint(const CPoint &&pP): mX(std::move(pP.mX)){}
 
-      CPoint operator= (const CPoint &pP) {return CPoint(pP);}
+      CPoint& operator= (const CPoint &pP) {mX=pP.mX; return *this;}
 
-      CPoint operator= (const CPoint &&pP)
+      CPoint& operator= (const CPoint &&pP)
       {
         mX = std::move(pP.mX);
         return *this;
       }
 
+      double operator[] (unsigned pI) const{return mX[pI];}
+      double& operator[] (unsigned pI) {return mX[pI];}
+
+    private:
       std::vector<double> mX;
   };
 
@@ -67,7 +71,7 @@ namespace pso
     CPoint<DIM>& operator -= (CPoint<DIM> &pP0,const CPoint<DIM> &pP1)
     {
       for(unsigned i=0;i<DIM;++i)
-        pP0.mX[i]-=pP1.mX[i]; 
+        pP0[i]-=pP1[i]; 
       return pP0;
     }
 
@@ -75,7 +79,7 @@ namespace pso
     CPoint<DIM>& operator += (CPoint<DIM> &pP0,const CPoint<DIM> &pP1)
     {
       for(unsigned i=0;i<DIM;++i)
-        pP0.mX[i]+=pP1.mX[i]; 
+        pP0[i]+=pP1[i]; 
       return pP0;
     }
 
@@ -84,7 +88,7 @@ namespace pso
     {
       CPoint<DIM> lResult;
       for(unsigned i=0;i<DIM;++i)
-        lResult.mX[i]=pS*pP1.mX[i]; 
+        lResult[i]=pS*pP1[i]; 
       return lResult;
     }
 
@@ -93,7 +97,7 @@ namespace pso
     {
       CPoint<DIM> &lResult = const_cast<CPoint<DIM>&>(pP1);
       for(unsigned i=0;i<DIM;++i)
-        lResult.mX[i]*=pS; 
+        lResult[i]*=pS; 
       return lResult;
     }
 
@@ -101,7 +105,7 @@ namespace pso
     CPoint<DIM>& operator *=(CPoint<DIM> &pP1,const double pS)
     {
       for(unsigned i=0;i<DIM;++i)
-        pP1.mX[i]*=pS; 
+        pP1[i]*=pS; 
       return pP1;
     }
 
@@ -110,8 +114,8 @@ namespace pso
     {
       pOS << "(";
       for(unsigned i=0;i<DIM-1;++i)
-        pOS << pP.mX[i] << ",";
-      pOS << pP.mX[DIM-1] << ")";
+        pOS << pP[i] << ",";
+      pOS << pP[DIM-1] << ")";
       return pOS;
     }
 

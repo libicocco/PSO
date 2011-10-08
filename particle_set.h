@@ -16,7 +16,7 @@ namespace pso
     class CParticleSet
     {
       public:
-        CParticleSet(const std::function<double(tState)> &pEval,double pW=0.6,double pWp=0.6,double pWg=0.6,unsigned pNumParticles=10,double pTargetValue=0.00001,double pMaxIter=2):
+        CParticleSet(const std::function<double(tState)> &pEval,double pW=0.6,double pWp=0.6,double pWg=0.6,unsigned pNumParticles=5,double pTargetValue=0.00001,double pMaxIter=50):
           mParticles()//pNumParticles,CParticle<tState>(pEval,pW,pWp,pWg))
           ,mTargetValue(pTargetValue)
           ,mMaxIter(pMaxIter)
