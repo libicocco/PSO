@@ -16,7 +16,7 @@ namespace pso
     class CParticleSet
     {
       public:
-        CParticleSet(const std::function<double(tState)> &pEval,double pW=0.6,double pWp=0.6,double pWg=0.6,unsigned pNumParticles=5,double pTargetValue=0.00001,double pMaxIter=50):
+        CParticleSet(const std::function<double(tState)> &pEval,double pW=0.5,double pWp=0.9,double pWg=0.9,unsigned pNumParticles=10,double pTargetValue=-9999999999,double pMaxIter=50):
           mParticles()//pNumParticles,CParticle<tState>(pEval,pW,pWp,pWg))
           ,mTargetValue(pTargetValue)
           ,mMaxIter(pMaxIter)
@@ -26,8 +26,7 @@ namespace pso
         for(unsigned i=0;i<pNumParticles;++i)
           mParticles.emplace_back(pEval,pW,pWp,pWg);
       }
-        // XXX: cannot use auto or pointer!
-        CParticle<tState> run()
+        const CParticle<tState>& run()
         {
           auto lBestX = std::min_element(mParticles.begin(),mParticles.end());
 
