@@ -6,14 +6,22 @@
 #include <utility>
 #include "particle_set.h"
 
-static unsigned gPointCount;
 
 namespace pso
 {
   namespace operators
   {
+    class CDummy{}; // Dummy class to enable the operators for CPoint
+
     template<typename tLH,typename tRH>
-      typename std::decay<tLH>::type operator-(tLH &&pLH,tRH &&pRH)
+      // SFINAE
+      //typename std::enable_if<
+      // return type is _2 unless if _1; otherwise this class is not defined
+      // std::is_base_of<CDummy,typename std::decay<tLH>::type>::value, //
+      // true if CDummy is a base of tLH (without references or cv qualifiers)
+      // typename std::decay<tLH>::type>::type operator-(tLH &&pLH,tRH &&pRH)
+      // return type
+      typename std::enable_if<std::is_base_of<CDummy,typename std::decay<tLH>::type>::value, typename std::decay<tLH>::type>::type operator-(tLH &&pLH,tRH &&pRH)
       {
         typename std::decay<tLH>::type lRet(std::forward<tLH>(pLH));
         lRet-=pRH;
@@ -28,7 +36,6 @@ namespace pso
         return lRet;
       }
 
-    class CDummy{}; // Dummy class to enable the operators for CPoint
   }//namespace operators
 
   template <unsigned DIM>
@@ -40,19 +47,15 @@ namespace pso
         mX.reserve(DIM);
         for(unsigned i=0;i<DIM;++i)
           mX.emplace_back(getRnd());
-        std::cout << "point " << gPointCount++ << std::endl;
       }
       CPoint(const CPoint &pP): mX(pP.mX){}
 
       CPoint(const CPoint &&pP): mX(std::move(pP.mX)){}
 
-      CPoint operator= (const CPoint &pP)
-      {
-        return CPoint(pP);
-      }
+      CPoint operator= (const CPoint &pP) {return CPoint(pP);}
+
       CPoint operator= (const CPoint &&pP)
       {
-        //swap(const_cast<CPoint &>(pP));
         mX = std::move(pP.mX);
         return *this;
       }
