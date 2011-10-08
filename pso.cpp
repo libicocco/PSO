@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <array>
 #include "particle_set.h"
 #include "euclidean.h"
 
@@ -45,6 +46,7 @@ double run()
   std::cout << std::endl;
 
   pso::CParticleSet<CState> lParticleSet(std::bind<double>(gEval,lAttractors,lVars,std::placeholders::_1));
+  std::cout << "created" << std::endl;
 
   auto lBestX = lParticleSet.run();
 

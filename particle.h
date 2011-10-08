@@ -19,10 +19,21 @@ namespace pso
         ,mBestValue(mEval(mBestX))
       {
       }
+       
+      // needed in case the vector was resized
+      CParticle & operator= (const CParticle &pP) {std::cout << "throwing" << std::endl;throw(0);}
 
       void update(tState &pGlobalBestX,double pRp, double pRg)
       {
-        mV = mW*mV + mWp*pRp*(mBestX-mX) + mWg*pRg*(pGlobalBestX-mX);
+        //mV = mW*mV + mWp*pRp*(mBestX-mX) + mWg*pRg*(pGlobalBestX-mX);
+        std::cout << "st0" << std::endl;
+        mV *= mW;
+        std::cout << "st1" << std::endl;
+        mV += mWp*pRp*(mBestX-mX);
+        std::cout << "st2" << std::endl;
+        mV += mWg*pRg*(pGlobalBestX-mX);
+        std::cout << "st3" << std::endl;
+
         mX = mX+mV;
         double lValue = mEval(mX);
         if ( lValue < mBestValue)
@@ -55,5 +66,6 @@ namespace pso
       pOS << "[c:" << pP.mBestX << ";b:" << pP.mX << ";v:" << pP.value() << "]";
       return pOS;
     }
+
 }//namespace pso
 #endif// __PSO_PARTICLE_H__

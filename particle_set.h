@@ -17,11 +17,15 @@ namespace pso
     {
       public:
         CParticleSet(const std::function<double(tState)> &pEval,double pW=0.6,double pWp=0.6,double pWg=0.6,unsigned pNumParticles=10,double pTargetValue=0.00001,double pMaxIter=2):
-          mParticles(pNumParticles,CParticle<tState>(pEval,pW,pWp,pWg))
+          mParticles()//pNumParticles,CParticle<tState>(pEval,pW,pWp,pWg))
           ,mTargetValue(pTargetValue)
           ,mMaxIter(pMaxIter)
           ,mCount(0)
-      {}
+      {
+        mParticles.reserve(pNumParticles);
+        for(unsigned i=0;i<pNumParticles;++i)
+          mParticles.emplace_back(pEval,pW,pWp,pWg);
+      }
         // XXX: cannot use auto or pointer!
         CParticle<tState> run()
         {
